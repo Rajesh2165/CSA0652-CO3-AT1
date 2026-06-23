@@ -1,0 +1,44 @@
+import gzip
+import time
+
+# Create sorted dataset
+original_data = ",".join(str(i) for i in range(100000))
+
+# Compress data in memory
+compressed_data = gzip.compress(original_data.encode())
+
+# Measure decompression time
+start_decompress = time.time()
+
+decompressed_data = gzip.decompress(compressed_data).decode()
+
+end_decompress = time.time()
+
+arr = list(map(int, decompressed_data.split(",")))
+
+# Binary Search
+def binary_search(arr, key):
+    low = 0
+    high = len(arr) - 1
+
+    while low <= high:
+        mid = (low + high) // 2
+
+        if arr[mid] == key:
+            return mid
+        elif arr[mid] < key:
+            low = mid + 1
+        else:
+            high = mid - 1
+
+    return -1
+
+key = 75000
+
+start_search = time.time()
+result = binary_search(arr, key)
+end_search = time.time()
+
+print("Element Found at Index:", result)
+print("Decompression Time:", round(end_decompress - start_decompress, 6), "seconds")
+print("Search Time:", round(end_search - start_search, 6), "seconds")
